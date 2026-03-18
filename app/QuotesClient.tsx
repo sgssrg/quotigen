@@ -24,11 +24,6 @@ export default function QuotesClient({
       console.error("Error fetching quotes:", error);
     }
   };
-  useEffect(() => {
-    console.log("QuotesClient.tsx", quotes);
-    console.log("QuotesClient.tsx", quotesInitial);
-    setQuotes(quotesInitial);
-  }, [quotesInitial]);
 
   return (
     <div className="wrapper">
