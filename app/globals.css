@@ -86,6 +86,11 @@ body {
   font-size: 1rem;
   margin: 0.5rem;
   padding: 0.5rem;
+  text-align: center;
+  color: var(--font);
+}
+.input::placeholder {
+  text-align: center;
 }
 
 .material-symbols-outlined {

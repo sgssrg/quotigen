@@ -12,7 +12,7 @@ export default function QuotesClient({
   }[];
 }) {
   const [quotes, setQuotes] = useState(quotesInitial);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState<number | null>(null);
 
   const fetchQuotes = async () => {
     try {
@@ -54,8 +54,8 @@ export default function QuotesClient({
               type="number"
               className="input"
               placeholder="Quantity"
-              value={quantity}
-              onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+              value={quantity ?? ""}
+              onChange={(e) => setQuantity(e.target.value ? Number.parseInt(e.target.value, 10) : null)}
             />
           </div>
           <div className="btns">

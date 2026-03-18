@@ -6,6 +6,7 @@ export async function GET(req: Request) {
   const limit = searchParams.get("limit") || "1";
 
   try {
+    // Server-side fetch: browser never sees the insecure HTTP call
     const response = await axios.get(
       `http://api.quotable.io/quotes/random?limit=${limit}`,
     );
