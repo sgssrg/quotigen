@@ -1,14 +1,7 @@
-import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev";
+import type { NextConfig } from "next";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  // add other Next.js options here
+const nextConfig: NextConfig = {
+  /* config options here */
 };
 
-export default async () => {
-  if (process.env.NODE_ENV === "development") {
-    await setupDevPlatform();
-  }
-  return nextConfig;
-};
+export default nextConfig;
