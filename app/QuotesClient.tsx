@@ -6,7 +6,10 @@ import "./globals.css";
 export default function QuotesClient({
   quotesInitial,
 }: {
-  readonly quotesInitial: readonly { readonly content: string; readonly author: string }[];
+  readonly quotesInitial: readonly {
+    readonly content: string;
+    readonly author: string;
+  }[];
 }) {
   const [quotes, setQuotes] = useState(quotesInitial);
   const [quantity, setQuantity] = useState(1);
@@ -14,9 +17,9 @@ export default function QuotesClient({
   const fetchQuotes = async () => {
     try {
       const response = await axios.get(
-        `https://api.quotable.io/quotes/random?limit=${quantity}`,
+        `http://api.quotable.io/quotes/random?limit=${quantity}`,
       );
-      setQuotes([...quotes, ...response.data]);
+      setQuotes([...response.data, ...quotes]);
     } catch (error) {
       console.error("Error fetching quotes:", error);
     }
