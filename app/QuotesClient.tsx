@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import "./globals.css";
 
@@ -24,6 +24,11 @@ export default function QuotesClient({
       console.error("Error fetching quotes:", error);
     }
   };
+  useEffect(() => {
+    console.log("QuotesClient.tsx", quotes);
+    console.log("QuotesClient.tsx", quotesInitial);
+    setQuotes(quotesInitial);
+  }, [quotesInitial]);
 
   return (
     <div className="wrapper">
