@@ -16,9 +16,7 @@ export default function QuotesClient({
 
   const fetchQuotes = async () => {
     try {
-      const response = await axios.get(
-        `http://api.quotable.io/quotes/random?limit=${quantity}`,
-      );
+      const response = await axios.get(`/api/quotes?limit=${quantity}`);
       setQuotes([...response.data, ...quotes]);
     } catch (error) {
       console.error("Error fetching quotes:", error);
