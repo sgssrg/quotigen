@@ -3,4 +3,4 @@ compatibility_date = "2026-03-18"
 compatibility_flags = ["nodejs_compat"]
 
 # Cloudflare Pages build output
-pages_build_output_dir = ".next"
+pages_build_output_dir = ".vercel/output/static"
