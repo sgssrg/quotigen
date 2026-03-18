@@ -1,65 +1,99 @@
-import Image from "next/image";
+"use client";
+
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 export default function Home() {
+  const [quantity, setQuantity] = useState(1);
+  const [quotes, setQuotes] = useState<
+    Array<{ content: string; author: string }>
+  >([]);
+  useEffect(() => {
+    // Fetch quotes based on quantity
+    axios
+      .get(`http://api.quotable.io/quotes/random`)
+      .then((response) => {
+        setQuotes([...quotes, ...response.data]);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching quotes:", error);
+      });
+  }, []);
+  const fetchQuotes = async () => {
+    axios
+      .get(`http://api.quotable.io/quotes/random?limit=${quantity}`)
+      .then((response) => {
+        setQuotes([...quotes, ...response.data]);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching quotes:", error);
+      });
+  };
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="wrapper">
+      <div className="qc-container">
+        <div className="btn-wrapper">
+          <div className="branding">
+            <svg
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              className="favicon"
+              fill="#52b788"
+              viewBox="-128 128 712 256"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              <path
+                d="M0 0 C0 21.45 0 42.9 0 65 C-7.26 65.66 -14.52 66.32 -22 67 C-32.87599861 69.48402437 -42.92941972 72.23650109 -53 77 C-53.969375 77.43957031 -54.93875 77.87914062 -55.9375 78.33203125 C-68.04768752 84.05598707 -78.35697262 91.74960403 -88 101 C-88.83273437 101.76957031 -89.66546875 102.53914063 -90.5234375 103.33203125 C-97.08624911 109.58184723 -102.12180545 116.42843934 -107 124 C-107.54398437 124.80953125 -108.08796875 125.6190625 -108.6484375 126.453125 C-121.38930023 146.2722448 -124.89754609 168.87300703 -127 192 C-85.09 192 -43.18 192 0 192 C0 255.36 0 318.72 0 384 C-63.36 384 -126.72 384 -192 384 C-192.16121214 331.76278954 -192.16121214 331.76278954 -192.1953125 309.76367188 C-192.21898705 294.61281884 -192.24671989 279.46205521 -192.30175781 264.3112793 C-192.34183385 253.27385941 -192.36748186 242.23651251 -192.37635398 231.19902188 C-192.38153379 225.36369822 -192.39356459 219.52858322 -192.42292023 213.69332695 C-192.45041875 208.18166916 -192.45837672 202.67030257 -192.45243073 197.15858269 C-192.45351578 195.15414335 -192.4612617 193.1496925 -192.4768219 191.14531326 C-192.7672536 151.74321772 -180.38902153 111.89003128 -157 80 C-156.60425781 79.45907715 -156.20851563 78.9181543 -155.80078125 78.36083984 C-151.41218053 72.40078248 -146.9650832 66.64090625 -141.57421875 61.5390625 C-139.94160051 59.94290472 -138.51138588 58.2635233 -137.0625 56.5 C-133.73113389 52.55496119 -129.95709869 49.30217818 -126 46 C-125.19820313 45.31035156 -124.39640625 44.62070313 -123.5703125 43.91015625 C-97.50965394 21.90939257 -66.38336313 8.27166331 -33 2 C-31.91332031 1.77570313 -30.82664062 1.55140625 -29.70703125 1.3203125 C-19.56412695 -0.55657473 -10.73394647 0 0 0 Z "
+                fill="#52b788"
+                transform="translate(512,64)"
+              />
+              <path
+                d="M0 0 C0 21.45 0 42.9 0 65 C-7.26 65.66 -14.52 66.32 -22 67 C-32.87599861 69.48402437 -42.92941972 72.23650109 -53 77 C-53.969375 77.43957031 -54.93875 77.87914062 -55.9375 78.33203125 C-68.04768752 84.05598707 -78.35697262 91.74960403 -88 101 C-88.83273438 101.76957031 -89.66546875 102.53914063 -90.5234375 103.33203125 C-97.08624911 109.58184723 -102.12180545 116.42843934 -107 124 C-107.54398437 124.80953125 -108.08796875 125.6190625 -108.6484375 126.453125 C-121.38930023 146.2722448 -124.89754609 168.87300703 -127 192 C-85.09 192 -43.18 192 0 192 C0 255.36 0 318.72 0 384 C-63.36 384 -126.72 384 -192 384 C-192.16121214 331.76278954 -192.16121214 331.76278954 -192.1953125 309.76367188 C-192.21898705 294.61281884 -192.24671989 279.46205521 -192.30175781 264.3112793 C-192.34183385 253.27385941 -192.36748186 242.23651251 -192.37635398 231.19902188 C-192.38153379 225.36369822 -192.39356459 219.52858322 -192.42292023 213.69332695 C-192.45041875 208.18166916 -192.45837672 202.67030257 -192.45243073 197.15858269 C-192.45351578 195.15414335 -192.4612617 193.1496925 -192.4768219 191.14531326 C-192.7672536 151.74321772 -180.38902153 111.89003128 -157 80 C-156.60425781 79.45907715 -156.20851562 78.9181543 -155.80078125 78.36083984 C-151.41218053 72.40078248 -146.9650832 66.64090625 -141.57421875 61.5390625 C-139.94160051 59.94290472 -138.51138588 58.2635233 -137.0625 56.5 C-133.73113389 52.55496119 -129.95709869 49.30217818 -126 46 C-125.19820313 45.31035156 -124.39640625 44.62070313 -123.5703125 43.91015625 C-97.50965394 21.90939257 -66.38336313 8.27166331 -33 2 C-31.91332031 1.77570313 -30.82664063 1.55140625 -29.70703125 1.3203125 C-19.56412695 -0.55657473 -10.73394647 0 0 0 Z "
+                fill="#52b788"
+                transform="translate(192,64)"
+              />
+            </svg>
+
+            <h1 className="brand">Quotigen</h1>
+          </div>
+          <div className="input-wrapper">
+            <input
+              type="number"
+              className="input"
+              placeholder="Quantity"
+              value={quantity}
+              onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+          <div className="btns">
+            <button
+              className="btn"
+              onClick={() => {
+                fetchQuotes();
+              }}
+            >
+              <span className="material-symbols-outlined">directory_sync</span>
+            </button>
+          </div>
         </div>
-      </main>
+        {quotes.map((quote: any, index: number) => (
+          <div className="quote-wrapper" key={index}>
+            <button
+              className="btn"
+              onClick={() =>
+                navigator.clipboard.writeText(
+                  `${quote.content}   ~ ${quote.author}`,
+                )
+              }
+            >
+              <span className="material-symbols-outlined">content_copy</span>
+            </button>
+            <h1 className="quote">{quote.content}</h1>
+            <p className="author">~ {quote.author}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
